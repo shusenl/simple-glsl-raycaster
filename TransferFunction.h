@@ -28,10 +28,10 @@
 
 struct Key
 {
-	int ID; //0 .. 255
-	int posx, posy;
-	float color[4]; //RGBA
-	bool active;
+  int ID; //0 .. 255
+  int posx, posy;
+  float color[4]; //RGBA
+  bool active;
 
   friend std::ostream& operator<<(std::ostream&, const Key&);
   friend std::istream& operator>>(std::istream&, Key&);
@@ -40,15 +40,15 @@ struct Key
 class TransferFunction
 {
 public:
-	TransferFunction();
+  TransferFunction();
     ~TransferFunction();
-	void Render();
-	bool MouseButton(int button, int state, int x, int y);//state 0 down 1 up
-	bool MouseMove(int x, int y);
-	void SavetoFile(const char*) ;
-	void LoadfromFile(const char *);
-	void setHistogram(double* his) {histogram = his; }
-	GLuint getTexture() {return Lut;}
+  void Render();
+  bool MouseButton(int button, int state, int x, int y);//state 0 down 1 up
+  bool MouseMove(int x, int y);
+  void SavetoFile(const char*) ;
+  void LoadfromFile(const char *);
+  void setHistogram(double* his) {histogram = his; }
+  GLuint getTexture() {return Lut;}
   GLuint getCDFTexture(){return PLut;}
   GLuint getPreIntTexture2D(){return PLut2D;}
   GLuint getPreIntTexture1D(){return PLut1D;}
@@ -56,33 +56,33 @@ public:
   void calculatePreIntegration();
   void calculatePreIntegration2D();
 private:
-	void _addkey(std::list<Key>::iterator it,Key key);
-	void _deletekey(std::list<Key>::iterator it);
-	void _setkeycolor(std::list<Key>::iterator it, float color[]);
-	void _updatecolortable();
-	bool _notinrang(int x, int y);
-	int _classify(int posx, int posy);
-	void _generatecolorpalette();
+  void _addkey(std::list<Key>::iterator it,Key key);
+  void _deletekey(std::list<Key>::iterator it);
+  void _setkeycolor(std::list<Key>::iterator it, float color[]);
+  void _updatecolortable();
+  bool _notinrang(int x, int y);
+  int _classify(int posx, int posy);
+  void _generatecolorpalette();
 
-	unsigned char colortable[TABLESIZE][4];
+  unsigned char colortable[TABLESIZE][4];
   float CDFtable[TABLESIZE][4];
   float preIntegrateTable[TABLESIZE][TABLESIZE][4];
   float preIntegrateTable1D[TABLESIZE][4];
 
-	float **colorpalette; //256*3
-	double *histogram;
-	GLuint Lut, PLut, PLut1D, PLut2D;
-	std::list<Key> Keylist;
+  float **colorpalette; //256*3
+  double *histogram;
+  GLuint Lut, PLut, PLut1D, PLut2D;
+  std::list<Key> Keylist;
 
-	//states
-	int offsetx, offsety;
-		//pointer to the key being selected or the key closest to the mouse hit point
-	std::list<Key>::iterator currentkey;
+  //states
+  int offsetx, offsety;
+    //pointer to the key being selected or the key closest to the mouse hit point
+  std::list<Key>::iterator currentkey;
   int preIntegrationMode;
-	
-	//mouse
-	int mousedownpos[2];
-	bool dragenable;
+
+  //mouse
+  int mousedownpos[2];
+  bool dragenable;
 };
 
 

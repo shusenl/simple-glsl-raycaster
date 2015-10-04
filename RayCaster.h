@@ -77,8 +77,8 @@ enum dataType
 class RayCaster
 {
 public:
-	RayCaster();
-	~RayCaster();
+  RayCaster();
+  ~RayCaster();
 
   void Init(int width, int height);
   bool LoadShader(std::string* VertString  ,std::string* FragString);
@@ -88,9 +88,9 @@ public:
 
   void Render();
   void RenderShadow();
-	void TestRender();
+  void TestRender();
   void UpdateShadowVolume();
-  void Resize(int width, int height); 
+  void Resize(int width, int height);
 
   //Data Source
   void SetLookUpTable(unsigned int* table, size_t len);
@@ -98,7 +98,7 @@ public:
   void SetLookUpTableGLTex(GLuint tex){_lut = tex;}
   void SetCDFTableGLTex(GLuint tex){_CDFlut = tex;}
   void SetPreInt2DTableGLTex(GLuint tex){_preInt2D = tex;}
-  
+
   //get
   int getViewportWidth(){ return _width;}
   int getViewportHeight(){ return _height;}
@@ -113,7 +113,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 public:
   ArcBall *arcBall;
-  //status for saving 
+  //status for saving
   MATRIX4<float> _oldRot;
   MATRIX4<float> _newRot;
   VECTOR3<float> _transVec;
@@ -123,7 +123,7 @@ private:
   parameterViewing _paraV;
   parameterShading _paraS;
   float *_O; //3  camera at world space
-  float *_Dir; //3 camera position in world space	
+  float *_Dir; //3 camera position in world space
   float *_Up; //the up direction of the camera
 
   //raycaster parameter
@@ -141,27 +141,26 @@ private:
   GLuint _lut, _CDFlut, _preInt2D;
 
   //temps
-	GLTexture *texNodePool3D;
-	GLTexture *texBlockPool;
+  GLTexture *texNodePool3D;
+  GLTexture *texBlockPool;
 
-	float light_rotate[16];
+  float light_rotate[16];
 
 private:
   //GLTexture *texFront, *texBack;
   unsigned int _blockPoolDim;
-	unsigned int _nodePoolDim;
-	unsigned int _blockSize;
-	
-	//volume size
-	int _sizeX;
-	int _sizeY;
-	int _sizeZ;
+  unsigned int _nodePoolDim;
+  unsigned int _blockSize;
+
+  //volume size
+  int _sizeX;
+  int _sizeY;
+  int _sizeZ;
 
   //volume shadow
   FramebufferObject* _fbo;
   GLTexture *_shadowTex;
   int _shadowRes;
-
 
 };
 

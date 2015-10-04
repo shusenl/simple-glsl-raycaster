@@ -4,16 +4,18 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-//a GL wrapper 
+//a GL wrapper
 struct glInitStatus
 {
-	glInitStatus()
-		:pixelPackedAlignment(1),pixelUnpackedAlignment(1)
-	{};
-	//PixelStorei
-	unsigned int pixelPackedAlignment, pixelUnpackedAlignment;
+  glInitStatus()
+    :pixelPackedAlignment(1),pixelUnpackedAlignment(1)
+  {
 
-	//
+  };
+  //PixelStorei
+  unsigned int pixelPackedAlignment, pixelUnpackedAlignment;
+
+  //
 };
 /*
 * A collection of reusable function on top of OpenGL
@@ -23,35 +25,30 @@ struct glInitStatus
 class GL
 {
 public:
-	GL();
-	~GL();
-	//init GL
-	static void InitGLContext(); //called when there is no GLUT 
-	static void InitGLStatus(glInitStatus &GLstatus);
-	
-	//drawing geometry commands 
-	static void DrawFullScreenQuad();
-	static void DrawFullScreenQuadNegativeOneToOne();
+  GL();
+  ~GL();
+  //init GL
+  static void InitGLContext(); //called when there is no GLUT
+  static void InitGLStatus(glInitStatus &GLstatus);
 
-	//view port and camera
-	static void SetupPerspectView(int w, int h, float *rotMat4X4, float *transVec3, float *eye = 0 );
-	static void SetupOrthogonalView(int viewport_ox, int viewport_oy,int viewport_w, int viewport_h,
-										int left=0, int right=1, int bottom=0, int top=1);
+  //drawing geometry commands
+  static void DrawFullScreenQuad();
+  static void DrawFullScreenQuadNegativeOneToOne();
 
-	//MRT
-	static void DrawRenderTarget(int o_x, int o_y, int x, int y, GLuint tex);
+  //view port and camera
+  static void SetupPerspectView(int w, int h, float *rotMat4X4, float *transVec3, float *eye = 0 );
+  static void SetupOrthogonalView(int viewport_ox, int viewport_oy,int viewport_w, int viewport_h,
+                    int left=0, int right=1, int bottom=0, int top=1);
 
-	//Matrix
-	static void BuildViewingMatrix(float* modelViewMatrix, float translate[], float invRotMat[]);//tran vec3 rot vec16
-	static void BuildViewingMatrixNoTranslation(GLfloat* modelViewMatrix, GLfloat invRotMat[]);
+  //MRT
+  static void DrawRenderTarget(int o_x, int o_y, int x, int y, GLuint tex);
 
-	//error checking
-	static void CheckErrors();
+  //Matrix
+  static void BuildViewingMatrix(float* modelViewMatrix, float translate[], float invRotMat[]);//tran vec3 rot vec16
+  static void BuildViewingMatrixNoTranslation(GLfloat* modelViewMatrix, GLfloat invRotMat[]);
 
-
-private:
-	
-
+  //error checking
+  static void CheckErrors();
 
 
 };

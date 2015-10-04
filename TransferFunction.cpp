@@ -19,7 +19,7 @@ std::ostream& operator<<(std::ostream &os, const Key &key)
 
 std::istream& operator>>(std::istream &is, Key &key)
 {
-    is >> key.ID;    
+    is >> key.ID;
     is >> key.posx >> key.posy;
     is >> key.color[0] >> key.color[1] >> key.color[2] >> key.color[3];
     is >> key.active;
@@ -30,66 +30,66 @@ std::istream& operator>>(std::istream &is, Key &key)
 /******************************************************
 * KeyList: A class for keys list
 ******************************************************/
-extern "C"  float** jet(int m);   
+extern "C"  float** jet(int m);
 
 TransferFunction::TransferFunction()
 {
-	//setup status
-	offsetx = 10;
-	offsety = 10;
-	dragenable = false;
+  //setup status
+  offsetx = 10;
+  offsety = 10;
+  dragenable = false;
   preIntegrationMode = 1;
 
-	//ramp
-	Key key1, key2;
-	key1.ID = 0;
-	key1.active = false;
-	key1.color[0] = 1.0;
-	key1.color[1] = 1.0;
-	key1.color[2] = 1.0;
-	key1.color[3] = 0.0;
-	key1.posx = MARGIN;
-	key1.posy = MARGIN;
-	Keylist.push_back(key1);
+  //ramp
+  Key key1, key2;
+  key1.ID = 0;
+  key1.active = false;
+  key1.color[0] = 1.0;
+  key1.color[1] = 1.0;
+  key1.color[2] = 1.0;
+  key1.color[3] = 0.0;
+  key1.posx = MARGIN;
+  key1.posy = MARGIN;
+  Keylist.push_back(key1);
 
 
-	key2.ID = 255;
-	key2.active = false;
-	key2.color[0] = 1.0;
-	key2.color[1] = 1.0;
-	key2.color[2] = 1.0;
-	key2.color[3] = 1.0;
-	key2.posx = HISTO_X+MARGIN;
-	key2.posy = MARGIN+HISTO_Y;
+  key2.ID = 255;
+  key2.active = false;
+  key2.color[0] = 1.0;
+  key2.color[1] = 1.0;
+  key2.color[2] = 1.0;
+  key2.color[3] = 1.0;
+  key2.posx = HISTO_X+MARGIN;
+  key2.posy = MARGIN+HISTO_Y;
 
-	Keylist.push_back(key2);
-	//ramp end
-	
-	glGenTextures(1,&Lut);
-	glBindTexture(GL_TEXTURE_1D,Lut);
-	// set the texture parameters
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  Keylist.push_back(key2);
+  //ramp end
 
-	glGenTextures(1,&PLut);
+  glGenTextures(1,&Lut);
+  glBindTexture(GL_TEXTURE_1D,Lut);
+  // set the texture parameters
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  glGenTextures(1,&PLut);
   glBindTexture(GL_TEXTURE_1D, PLut);
   //need the parameter to make the texture works
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glGenTextures(1,&PLut2D);
+  glGenTextures(1,&PLut2D);
   glBindTexture(GL_TEXTURE_2D, PLut2D);
   //need the parameter to make the texture works
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
   this->_generatecolorpalette();
-	
-	_updatecolortable();
+
+  _updatecolortable();
 }
 
 TransferFunction::~TransferFunction()
@@ -100,274 +100,274 @@ TransferFunction::~TransferFunction()
 void TransferFunction::Render()
 {
 
-	glViewport(offsetx,offsety,MARGIN + HISTO_X + COLORPIKER_X + MARGIN, 
-		MARGIN + HISTO_Y + COLORPIKER_Y + MARGIN);
-	// setup for planar 2D rendering
-	glMatrixMode(GL_MODELVIEW);
-	//glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	//glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0,float(MARGIN + HISTO_X + COLORPIKER_X + MARGIN)
-		,0.0,float(MARGIN + HISTO_Y + COLORPIKER_Y + MARGIN),0.0,2.0);
+  glViewport(offsetx,offsety,MARGIN + HISTO_X + COLORPIKER_X + MARGIN,
+    MARGIN + HISTO_Y + COLORPIKER_Y + MARGIN);
+  // setup for planar 2D rendering
+  glMatrixMode(GL_MODELVIEW);
+  //glPushMatrix();
+  glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  //glPushMatrix();
+  glLoadIdentity();
+  glOrtho(0,float(MARGIN + HISTO_X + COLORPIKER_X + MARGIN)
+    ,0.0,float(MARGIN + HISTO_Y + COLORPIKER_Y + MARGIN),0.0,2.0);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//draw colorshow
-	glBegin(GL_QUAD_STRIP);
-	for(int i=0; i<256; i++)
-	{
-		glColor4f(float(colortable[i][0])/255.0f,float(colortable[i][1])/255.0f,float(colortable[i][2])/255.0f,float(colortable[i][3])/255.0f);
-		glVertex2f(i*float(HISTO_X)/255.0f,MARGIN + HISTO_Y + MARGIN);
-		glVertex2f(i*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
+  glDisable(GL_DEPTH_TEST);
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
-		glColor4f(float(colortable[i+1][0])/255.0f,float(colortable[i+1][1])/255.0f,float(colortable[i+1][2])/255.0f,float(colortable[i+1][3])/255.0f);
-		glVertex2f((i+1)*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + MARGIN);
-		glVertex2f((i+1)*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + COLORSHOW_Y + MARGIN);
-	}
-	glEnd();
+  //draw colorshow
+  glBegin(GL_QUAD_STRIP);
+  for(int i=0; i<256; i++)
+  {
+    glColor4f(float(colortable[i][0])/255.0f,float(colortable[i][1])/255.0f,float(colortable[i][2])/255.0f,float(colortable[i][3])/255.0f);
+    glVertex2f(i*float(HISTO_X)/255.0f,MARGIN + HISTO_Y + MARGIN);
+    glVertex2f(i*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
 
-	//draw background
-	glBegin(GL_QUADS);
-		glColor4f(0.3f,0.3f,0.3f,0.4f);
-		glVertex2i(0,0);
-		glVertex2i(MARGIN + HISTO_X + MARGIN,0);
-		glVertex2i(MARGIN + HISTO_X + MARGIN, MARGIN + HISTO_Y + MARGIN);
-		glVertex2i(0, MARGIN + HISTO_Y + MARGIN);
-	glEnd();
+    glColor4f(float(colortable[i+1][0])/255.0f,float(colortable[i+1][1])/255.0f,float(colortable[i+1][2])/255.0f,float(colortable[i+1][3])/255.0f);
+    glVertex2f((i+1)*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + MARGIN);
+    glVertex2f((i+1)*float(HISTO_X)/255.0f, MARGIN + HISTO_Y + COLORSHOW_Y + MARGIN);
+  }
+  glEnd();
+
+  //draw background
+  glBegin(GL_QUADS);
+    glColor4f(0.3f,0.3f,0.3f,0.4f);
+    glVertex2i(0,0);
+    glVertex2i(MARGIN + HISTO_X + MARGIN,0);
+    glVertex2i(MARGIN + HISTO_X + MARGIN, MARGIN + HISTO_Y + MARGIN);
+    glVertex2i(0, MARGIN + HISTO_Y + MARGIN);
+  glEnd();
 
 
-	//draw histogram
-	//int	hight = 0;
-	//for(int i=0; i<256; i++)
-	//{
-	//glLineWidth(1.0);
-	//glBegin(GL_LINES);
-	//glColor4f(1.0,1.0,1.0,0.5);
-	//glVertex2f(float(float(i)/255.0f*HISTO_X + MARGIN), MARGIN);
-	//glVertex2f(float(float(i)/255.0f*HISTO_X + MARGIN), float(histogram[i]));
-	//glEnd();
-	//}
+  //draw histogram
+  //int	hight = 0;
+  //for(int i=0; i<256; i++)
+  //{
+  //glLineWidth(1.0);
+  //glBegin(GL_LINES);
+  //glColor4f(1.0,1.0,1.0,0.5);
+  //glVertex2f(float(float(i)/255.0f*HISTO_X + MARGIN), MARGIN);
+  //glVertex2f(float(float(i)/255.0f*HISTO_X + MARGIN), float(histogram[i]));
+  //glEnd();
+  //}
 
-	//draw key line and kep point
-	std::list<Key>::iterator it = Keylist.begin();
-	
-	glBegin(GL_LINE_STRIP);
-	for(;it!=Keylist.end();it++)
-	{
-		glColor3f(it->color[0],it->color[1],it->color[2]);
-		glVertex2i(it->posx, it->posy);
-	}
-	glEnd();
-	//non active point
-	glPointSize(8.0);
-	glBegin(GL_POINTS);
-	for(it=Keylist.begin();it!=Keylist.end();it++)
-	{
-		if(!it->active)
-		{
-			glColor3f(it->color[0],it->color[1],it->color[2]);
-			glVertex2i(it->posx, it->posy);
-		}
-	}
-	glEnd();
-	//active point
-	glPointSize(12.0);
-	glBegin(GL_POINTS);
-	for(it=Keylist.begin();it!=Keylist.end();it++)
-	{
-		if(it->active)
-		{
-			glColor3f(it->color[0],it->color[1],it->color[2]);
-			glVertex2i(it->posx, it->posy);
-		}
-	}
-	glEnd();
+  //draw key line and kep point
+  std::list<Key>::iterator it = Keylist.begin();
 
-	
-	//draw colorpiker
-	glBegin(GL_QUAD_STRIP);
+  glBegin(GL_LINE_STRIP);
+  for(;it!=Keylist.end();it++)
+  {
+    glColor3f(it->color[0],it->color[1],it->color[2]);
+    glVertex2i(it->posx, it->posy);
+  }
+  glEnd();
+  //non active point
+  glPointSize(8.0);
+  glBegin(GL_POINTS);
+  for(it=Keylist.begin();it!=Keylist.end();it++)
+  {
+    if(!it->active)
+    {
+      glColor3f(it->color[0],it->color[1],it->color[2]);
+      glVertex2i(it->posx, it->posy);
+    }
+  }
+  glEnd();
+  //active point
+  glPointSize(12.0);
+  glBegin(GL_POINTS);
+  for(it=Keylist.begin();it!=Keylist.end();it++)
+  {
+    if(it->active)
+    {
+      glColor3f(it->color[0],it->color[1],it->color[2]);
+      glVertex2i(it->posx, it->posy);
+    }
+  }
+  glEnd();
 
-		//glColor3f(1.0f,0.0f,0.0f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN*7,0);
-		//glColor3f(0.8f,0.8f,0.8f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X,0);
-		for(int i=0; i<256; i++)
-		{
-			glColor3f(colorpalette[i][0],colorpalette[i][1],colorpalette[i][2]);
-			glVertex2i(MARGIN + HISTO_X + MARGIN*7, int(MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN) );
-			//glColor3f(0.8f,0.8f,0.8f);
-			glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, int(MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN) );
-		}
 
-		//glColor3f(1.0f,0.0f,1.0f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + float(HISTO_Y)*2/3 + MARGIN + COLORSHOW_Y);
-		//glColor3f(0.8f,0.8f,0.8f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + float(HISTO_Y)*2/3 + MARGIN + COLORSHOW_Y);
+  //draw colorpiker
+  glBegin(GL_QUAD_STRIP);
 
-		//glColor3f(1.0f,0.0f,0.0f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
-		//glColor3f(0.8f,0.8f,0.8f);
-		//glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
-	glEnd();
+    //glColor3f(1.0f,0.0f,0.0f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN*7,0);
+    //glColor3f(0.8f,0.8f,0.8f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X,0);
+    for(int i=0; i<256; i++)
+    {
+      glColor3f(colorpalette[i][0],colorpalette[i][1],colorpalette[i][2]);
+      glVertex2i(MARGIN + HISTO_X + MARGIN*7, int(MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN) );
+      //glColor3f(0.8f,0.8f,0.8f);
+      glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, int(MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN) );
+    }
 
-	//resume preview GL 
-	glDisable(GL_BLEND);
-	//glMatrixMode(GL_PROJECTION);
-	//glPopMatrix();
-	//glMatrixMode(GL_MODELVIEW);
-	//glPopMatrix();
+    //glColor3f(1.0f,0.0f,1.0f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + float(HISTO_Y)*2/3 + MARGIN + COLORSHOW_Y);
+    //glColor3f(0.8f,0.8f,0.8f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + float(HISTO_Y)*2/3 + MARGIN + COLORSHOW_Y);
+
+    //glColor3f(1.0f,0.0f,0.0f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
+    //glColor3f(0.8f,0.8f,0.8f);
+    //glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + HISTO_Y + MARGIN + COLORSHOW_Y);
+  glEnd();
+
+  //resume preview GL
+  glDisable(GL_BLEND);
+  //glMatrixMode(GL_PROJECTION);
+  //glPopMatrix();
+  //glMatrixMode(GL_MODELVIEW);
+  //glPopMatrix();
 }
 
 bool TransferFunction::MouseMove(int x, int y)
 {
-	//position in fransferfunction viewport
-	int fx = x-offsetx;
-	int fy = y-offsety;
+  //position in fransferfunction viewport
+  int fx = x-offsetx;
+  int fy = y-offsety;
 
-	//is it in the TF rang
-	if(_notinrang(x,y))
-	return false;
+  //is it in the TF rang
+  if(_notinrang(x,y))
+  return false;
 
-	if(dragenable)
-	{
-		std::list<Key>::iterator it = Keylist.begin();
-		for(; it!=Keylist.end(); it++)
-		{
-			it->active = false;
-		}
-		currentkey->active = true;
+  if(dragenable)
+  {
+    std::list<Key>::iterator it = Keylist.begin();
+    for(; it!=Keylist.end(); it++)
+    {
+      it->active = false;
+    }
+    currentkey->active = true;
 
-		if (currentkey != Keylist.begin() && currentkey != Keylist.end())
-		{
-			currentkey--;
-			if (fx < currentkey->posx)
-			{
-				fx = currentkey->posx+1;
-			}
-			currentkey++;
-			currentkey++;
-			if (fx > currentkey->posx)
-			{
-				fx = currentkey->posx-1;
-			}
-			currentkey--;
+    if (currentkey != Keylist.begin() && currentkey != Keylist.end())
+    {
+      currentkey--;
+      if (fx < currentkey->posx)
+      {
+        fx = currentkey->posx+1;
+      }
+      currentkey++;
+      currentkey++;
+      if (fx > currentkey->posx)
+      {
+        fx = currentkey->posx-1;
+      }
+      currentkey--;
 
-			currentkey->posx = fx;
-			currentkey->posy = fy;
-			currentkey->ID = int(float(fx-MARGIN)/float(HISTO_X)*255);
-			float alpha = float(fy-MARGIN)/float(HISTO_Y);
-			if(alpha<0 || alpha>1) alpha = 0;
-			currentkey->color[3] = alpha;
-		}
-	}
+      currentkey->posx = fx;
+      currentkey->posy = fy;
+      currentkey->ID = int(float(fx-MARGIN)/float(HISTO_X)*255);
+      float alpha = float(fy-MARGIN)/float(HISTO_Y);
+      if(alpha<0 || alpha>1) alpha = 0;
+      currentkey->color[3] = alpha;
+    }
+  }
 
 
 
-	_updatecolortable();
-	return true;
+  _updatecolortable();
+  return true;
 
 }
 
 bool TransferFunction::MouseButton(int button, int state, int x, int y)
 {
-	int fx = x-offsetx;
-	int fy = y-offsety;
-	//is it in the TF rang
-	if(_notinrang(x,y))
-	return false;
-			//glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN );
-			////glColor3f(0.8f,0.8f,0.8f);
-			//glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN );
+  int fx = x-offsetx;
+  int fy = y-offsety;
+  //is it in the TF rang
+  if(_notinrang(x,y))
+  return false;
+      //glVertex2i(MARGIN + HISTO_X + MARGIN*7, MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN );
+      ////glColor3f(0.8f,0.8f,0.8f);
+      //glVertex2i(MARGIN + HISTO_X + MARGIN + COLORPIKER_X, MARGIN + float(HISTO_Y+ COLORSHOW_Y)/256*(i+1) + MARGIN );
 
-	if(fx>MARGIN*8+HISTO_X && fx<MARGIN + HISTO_X + MARGIN + COLORPIKER_X
-		&& fy>MARGIN && fy<HISTO_Y+COLORSHOW_Y+MARGIN*2)
-	{
-		int index = int(float(fy-MARGIN)/float(HISTO_Y+COLORSHOW_Y+MARGIN*2)*255);
-		float setcolor[4];
-		//float alpha = float(fy-MARGIN)/float(HISTO_Y);
-		setcolor[0] = this->colorpalette[index][0];
-		setcolor[1] = this->colorpalette[index][1];
-		setcolor[2] = this->colorpalette[index][2];
-		setcolor[3] = 0;
+  if(fx>MARGIN*8+HISTO_X && fx<MARGIN + HISTO_X + MARGIN + COLORPIKER_X
+    && fy>MARGIN && fy<HISTO_Y+COLORSHOW_Y+MARGIN*2)
+  {
+    int index = int(float(fy-MARGIN)/float(HISTO_Y+COLORSHOW_Y+MARGIN*2)*255);
+    float setcolor[4];
+    //float alpha = float(fy-MARGIN)/float(HISTO_Y);
+    setcolor[0] = this->colorpalette[index][0];
+    setcolor[1] = this->colorpalette[index][1];
+    setcolor[2] = this->colorpalette[index][2];
+    setcolor[3] = 0;
 
-		std::list<Key>::iterator it = Keylist.begin();
-		for(;it!=Keylist.end();it++)
-			if(it->active == true)
-			{
-				setcolor[3] = it->color[3];
-				this->_setkeycolor(it,setcolor);
-			}
-	}
-	
-	if(LEFT_BUTTON == button)
-	{
-		switch(state) {
-		case 0: //0 down
-			{
-				int classifyresult = _classify(x,y);
+    std::list<Key>::iterator it = Keylist.begin();
+    for(;it!=Keylist.end();it++)
+      if(it->active == true)
+      {
+        setcolor[3] = it->color[3];
+        this->_setkeycolor(it,setcolor);
+      }
+  }
 
-				if(classifyresult==1)
-				{
-					std::list<Key>::iterator it = Keylist.begin();
-					for(; it!=Keylist.end(); it++)
-					{
-						it->active = false;
-					}
-					currentkey->active = true;
+  if(LEFT_BUTTON == button)
+  {
+    switch(state) {
+    case 0: //0 down
+      {
+        int classifyresult = _classify(x,y);
 
-					dragenable = true;
-				}
-				if(classifyresult==2)
-				{
-					Key key;
-					key.active = true;
-					key.ID = int(float(fx-MARGIN)/float(HISTO_X)*255);
-					key.posx = fx;
-					key.posy = fy;
+        if(classifyresult==1)
+        {
+          std::list<Key>::iterator it = Keylist.begin();
+          for(; it!=Keylist.end(); it++)
+          {
+            it->active = false;
+          }
+          currentkey->active = true;
 
-					float alpha = float(fy-MARGIN)/float(HISTO_Y);
-					if(alpha<0 || alpha>1) alpha = 0;
-					key.color[0] = float(colortable[key.ID][0])/255;
-					key.color[1] = float(colortable[key.ID][1])/255;
-					key.color[2] = float(colortable[key.ID][2])/255;
-					key.color[3] = alpha;
-					this->_addkey(currentkey,key);
-					//drage enabled so you can drag afer add a key
-					dragenable = true;
-				}
-				break;
-			}
+          dragenable = true;
+        }
+        if(classifyresult==2)
+        {
+          Key key;
+          key.active = true;
+          key.ID = int(float(fx-MARGIN)/float(HISTO_X)*255);
+          key.posx = fx;
+          key.posy = fy;
 
-		case 1: //1 up
-			{
-				dragenable	= false;
-			}
-			return true;
-		}
-	}
-	else if(RIGHT_BUTTON == button)
-	{
-		//if on key, delete the key!
-		if(_classify(x,y)==1)
-			Keylist.erase(currentkey);
-	}
+          float alpha = float(fy-MARGIN)/float(HISTO_Y);
+          if(alpha<0 || alpha>1) alpha = 0;
+          key.color[0] = float(colortable[key.ID][0])/255;
+          key.color[1] = float(colortable[key.ID][1])/255;
+          key.color[2] = float(colortable[key.ID][2])/255;
+          key.color[3] = alpha;
+          this->_addkey(currentkey,key);
+          //drage enabled so you can drag afer add a key
+          dragenable = true;
+        }
+        break;
+      }
 
-	//return false;
+    case 1: //1 up
+      {
+        dragenable	= false;
+      }
+      return true;
+    }
+  }
+  else if(RIGHT_BUTTON == button)
+  {
+    //if on key, delete the key!
+    if(_classify(x,y)==1)
+      Keylist.erase(currentkey);
+  }
+
+  //return false;
 
 
-	//updata colortable, since you may erase one key
-	_updatecolortable();
-	return true;
+  //updata colortable, since you may erase one key
+  _updatecolortable();
+  return true;
 
 }
 
-void TransferFunction::SavetoFile(const char *path) 
+void TransferFunction::SavetoFile(const char *path)
 {
     std::ofstream outfile(path);
     if(!outfile) {
@@ -381,7 +381,7 @@ void TransferFunction::SavetoFile(const char *path)
 
 void TransferFunction::LoadfromFile(const char *path)
 {
-	Keylist.clear();
+  Keylist.clear();
 
     std::ifstream infile(path);
     if(!infile) {
@@ -393,37 +393,37 @@ void TransferFunction::LoadfromFile(const char *path)
     std::copy(init, end, std::back_inserter(Keylist));
     infile.close();
 
-	_updatecolortable();
+  _updatecolortable();
     return;
 }
 
 //Private function
 void TransferFunction::_addkey(std::list<Key>::iterator current, Key key)
 {
-	Keylist.insert(current, key);
-	std::list<Key>::iterator it = Keylist.begin();
-	for(; it!=Keylist.end(); it++)
-	{
-		it->active = false;
-	}
-	current--;
-	current->active = true;
-	currentkey = current;
+  Keylist.insert(current, key);
+  std::list<Key>::iterator it = Keylist.begin();
+  for(; it!=Keylist.end(); it++)
+  {
+    it->active = false;
+  }
+  current--;
+  current->active = true;
+  currentkey = current;
 
 }
 
 void TransferFunction::_deletekey(std::list<Key>::iterator it)
 {
-	if(it != Keylist.end() || it != Keylist.begin())
-	Keylist.erase(it);
+  if(it != Keylist.end() || it != Keylist.begin())
+  Keylist.erase(it);
 }
 
 void TransferFunction::_setkeycolor(std::list<Key>::iterator it, float color[])
 {
-	it->color[0] = color[0];
-	it->color[1] = color[1];
-	it->color[2] = color[2];
-	it->color[3] = color[3];
+  it->color[0] = color[0];
+  it->color[1] = color[1];
+  it->color[2] = color[2];
+  it->color[3] = color[3];
 }
 void TransferFunction::calculatePreIntegration()
 {
@@ -431,7 +431,7 @@ void TransferFunction::calculatePreIntegration()
   {
     CDFtable[i][0]=0.0f; CDFtable[i][1]=0.0f; CDFtable[i][2]=0.0f; CDFtable[i][3]=0.0f;
   }
-   
+
   float sum[4] = {0.0f,0.0f,0.0f,0.0f};
   for(int i=0; i<TABLESIZE; i++)
   {
@@ -440,14 +440,14 @@ void TransferFunction::calculatePreIntegration()
     sum[2] += float(colortable[i][2]) /255.0f*(float(colortable[i][3]) /255.0f);
     sum[3] += float(colortable[i][3]) /255.0f;
 
-    CDFtable[i][0] = sum[0];///255.0; 
-    CDFtable[i][1] = sum[1];///255.0; 
+    CDFtable[i][0] = sum[0];///255.0;
+    CDFtable[i][1] = sum[1];///255.0;
     CDFtable[i][2] = sum[2];///255.0;
     CDFtable[i][3] = sum[3];///255.0;
   }
-	glBindTexture(GL_TEXTURE_1D, PLut);
-	glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA32F_ARB,TABLESIZE,0,GL_RGBA,GL_FLOAT,CDFtable);
-	glBindTexture(GL_TEXTURE_1D, Lut);
+  glBindTexture(GL_TEXTURE_1D, PLut);
+  glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA32F_ARB,TABLESIZE,0,GL_RGBA,GL_FLOAT,CDFtable);
+  glBindTexture(GL_TEXTURE_1D, Lut);
   GL::CheckErrors();
 }
 
@@ -457,12 +457,12 @@ void TransferFunction::calculatePreIntegration2D()
   for(int j=0; j<TABLESIZE; j++)
     for(int i=0; i<TABLESIZE; i++)
     {
-      preIntegrateTable[j][i][0]=0.0f; 
-      preIntegrateTable[j][i][1]=0.0f; 
-      preIntegrateTable[j][i][2]=0.0f; 
-      preIntegrateTable[j][i][3]=0.0f; 
+      preIntegrateTable[j][i][0]=0.0f;
+      preIntegrateTable[j][i][1]=0.0f;
+      preIntegrateTable[j][i][2]=0.0f;
+      preIntegrateTable[j][i][3]=0.0f;
     }
-   
+
   for(int j=0; j<TABLESIZE; j++)
     for(int i=0; i<TABLESIZE; i++)
     {
@@ -502,17 +502,17 @@ void TransferFunction::calculatePreIntegration2D()
           preIntegrateTable[j][i][0] = 0.0f;
           preIntegrateTable[j][i][1] = 0.0f;
           preIntegrateTable[j][i][2] = 0.0f;
-          preIntegrateTable[j][i][3] = 0.0f;        
+          preIntegrateTable[j][i][3] = 0.0f;
         }
         else
         {
           preIntegrateTable[j][i][0] /= alphaAccum;
           preIntegrateTable[j][i][1] /= alphaAccum;
           preIntegrateTable[j][i][2] /= alphaAccum;
-          preIntegrateTable[j][i][3] = alphaAccum/float(abs(j-i));        
+          preIntegrateTable[j][i][3] = alphaAccum/float(abs(j-i));
         }
         */
-        
+
         if(j>i)
         {
           for(float fj = float(j); fj>float(i); fj-=delta)
@@ -544,13 +544,13 @@ void TransferFunction::calculatePreIntegration2D()
           preIntegrateTable[j][i][1] /= preIntegrateTable[j][i][3];
           preIntegrateTable[j][i][2] /= preIntegrateTable[j][i][3];
         }
-        
-               
+
+
         /* //shader load validation use same table as the 1D pre-integration
-        preIntegrateTable[j][i][0] = abs(float(CDFtable[j][0] - CDFtable[i][0]))/abs(float(j-i)); 
-        preIntegrateTable[j][i][1] = abs(float(CDFtable[j][1] - CDFtable[i][1]))/abs(float(j-i)); 
-        preIntegrateTable[j][i][2] = abs(float(CDFtable[j][2] - CDFtable[i][2]))/abs(float(j-i)); 
-        preIntegrateTable[j][i][3] = abs(float(CDFtable[j][3] - CDFtable[i][3]))/abs(float(j-i)); 
+        preIntegrateTable[j][i][0] = abs(float(CDFtable[j][0] - CDFtable[i][0]))/abs(float(j-i));
+        preIntegrateTable[j][i][1] = abs(float(CDFtable[j][1] - CDFtable[i][1]))/abs(float(j-i));
+        preIntegrateTable[j][i][2] = abs(float(CDFtable[j][2] - CDFtable[i][2]))/abs(float(j-i));
+        preIntegrateTable[j][i][3] = abs(float(CDFtable[j][3] - CDFtable[i][3]))/abs(float(j-i));
         */
       }
       else
@@ -562,44 +562,44 @@ void TransferFunction::calculatePreIntegration2D()
       }
   }
 
-	glBindTexture(GL_TEXTURE_2D, PLut2D);
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA32F_ARB,TABLESIZE,TABLESIZE, 0,GL_RGBA,GL_FLOAT,preIntegrateTable);
+  glBindTexture(GL_TEXTURE_2D, PLut2D);
+  glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA32F_ARB,TABLESIZE,TABLESIZE, 0,GL_RGBA,GL_FLOAT,preIntegrateTable);
   GL::CheckErrors();
-	glBindTexture(GL_TEXTURE_1D, Lut);
+  glBindTexture(GL_TEXTURE_1D, Lut);
 }
 
 void TransferFunction::_updatecolortable()
 {
-	std::list<Key>::iterator it = Keylist.begin();
-	std::list<Key>::iterator oldit = it;
-	it++;
+  std::list<Key>::iterator it = Keylist.begin();
+  std::list<Key>::iterator oldit = it;
+  it++;
 
-	int interval = 0;
-	float incrementcolor[4];
+  int interval = 0;
+  float incrementcolor[4];
 
-	for(; it!=Keylist.end(); it++)
-	{
-		interval = abs(it->ID - oldit->ID);
-		
-		incrementcolor[0] = float((it->color[0] - oldit->color[0]))/float(interval);
-		incrementcolor[1] = float((it->color[1] - oldit->color[1]))/float(interval);
-		incrementcolor[2] = float((it->color[2] - oldit->color[2]))/float(interval);
-		incrementcolor[3] = float((it->color[3] - oldit->color[3]))/float(interval);
+  for(; it!=Keylist.end(); it++)
+  {
+    interval = abs(it->ID - oldit->ID);
 
-		for(int i = 1; i<=interval; i++)
-		{
-			colortable[oldit->ID +i][0] = (unsigned char)((oldit->color[0] + incrementcolor[0]*i)*255);
-			colortable[oldit->ID +i][1] = (unsigned char)((oldit->color[1] + incrementcolor[1]*i)*255);
-			colortable[oldit->ID +i][2] = (unsigned char)((oldit->color[2] + incrementcolor[2]*i)*255);
-			colortable[oldit->ID +i][3] = (unsigned char)((oldit->color[3] + incrementcolor[3]*i)*255);
-		}
-		oldit = it;
-	}
+    incrementcolor[0] = float((it->color[0] - oldit->color[0]))/float(interval);
+    incrementcolor[1] = float((it->color[1] - oldit->color[1]))/float(interval);
+    incrementcolor[2] = float((it->color[2] - oldit->color[2]))/float(interval);
+    incrementcolor[3] = float((it->color[3] - oldit->color[3]))/float(interval);
 
-	//updata texture
-  colortable[0][3]=0;//important get rid of zero case 
-	glBindTexture(GL_TEXTURE_1D, Lut);
-	glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA,TABLESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,colortable);
+    for(int i = 1; i<=interval; i++)
+    {
+      colortable[oldit->ID +i][0] = (unsigned char)((oldit->color[0] + incrementcolor[0]*i)*255);
+      colortable[oldit->ID +i][1] = (unsigned char)((oldit->color[1] + incrementcolor[1]*i)*255);
+      colortable[oldit->ID +i][2] = (unsigned char)((oldit->color[2] + incrementcolor[2]*i)*255);
+      colortable[oldit->ID +i][3] = (unsigned char)((oldit->color[3] + incrementcolor[3]*i)*255);
+    }
+    oldit = it;
+  }
+
+  //updata texture
+  colortable[0][3]=0;//important get rid of zero case
+  glBindTexture(GL_TEXTURE_1D, Lut);
+  glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA,TABLESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,colortable);
 
   if(preIntegrationMode == 1)
     calculatePreIntegration();
@@ -609,105 +609,105 @@ void TransferFunction::_updatecolortable()
 
 bool TransferFunction::_notinrang(int x, int y)
 {
-	if(x>offsetx&&x<offsetx+WIDTH && y>offsety&&y<offsety+HEIGHT)
-		return false;
-	else 
-		return true;
+  if(x>offsetx&&x<offsetx+WIDTH && y>offsety&&y<offsety+HEIGHT)
+    return false;
+  else
+    return true;
 }
 
-//helper function 
+//helper function
 float distancePointToLineSegment(int linepoint1[], int linepoint2[], int point[])
 {
-	float linedist;
-	float segdist;
-	float r_numerator = float((point[0]-linepoint1[0])*(linepoint2[0]-linepoint1[0]) + (point[1]-linepoint1[1])*(linepoint2[1]-linepoint1[1]));
-	float r_denomenator = float((linepoint2[0]-linepoint1[0])*(linepoint2[0]-linepoint1[0]) + (linepoint2[1]-linepoint1[1])*(linepoint2[1]-linepoint1[1]));
-	float r = r_numerator / r_denomenator;
+  float linedist;
+  float segdist;
+  float r_numerator = float((point[0]-linepoint1[0])*(linepoint2[0]-linepoint1[0]) + (point[1]-linepoint1[1])*(linepoint2[1]-linepoint1[1]));
+  float r_denomenator = float((linepoint2[0]-linepoint1[0])*(linepoint2[0]-linepoint1[0]) + (linepoint2[1]-linepoint1[1])*(linepoint2[1]-linepoint1[1]));
+  float r = r_numerator / r_denomenator;
 
-	float px = float(linepoint1[0] + r*(linepoint2[0]-linepoint1[0]));
+  float px = float(linepoint1[0] + r*(linepoint2[0]-linepoint1[0]));
     float py = float(linepoint1[1] + r*(linepoint2[1]-linepoint1[1]));
-   
+
     float s =  float(((linepoint1[1]-point[1])*(linepoint2[0]-linepoint1[0])-(linepoint1[0]-point[0])*(linepoint2[1]-linepoint1[1])) / r_denomenator);
 
-	linedist = fabs(s)*sqrt(r_denomenator);
+  linedist = fabs(s)*sqrt(r_denomenator);
 //
 // (xx,yy) is the point on the lineSegment closest to (cx,cy)
 //
-	float xx = px;
-	float yy = py;
+  float xx = px;
+  float yy = py;
 
-	if ( (r >= 0) && (r <= 1) )
-	{
-		segdist = linedist;
-	}
-	else
-	{
+  if ( (r >= 0) && (r <= 1) )
+  {
+    segdist = linedist;
+  }
+  else
+  {
 
-		float dist1 = float((point[0]-linepoint1[0])*(point[0]-linepoint1[0]) + (point[1]-linepoint1[1])*(point[1]-linepoint1[1]));
-		float dist2 = float((point[0]-linepoint2[0])*(point[0]-linepoint2[0]) + (point[1]-linepoint2[1])*(point[1]-linepoint2[1]));
-		if (dist1 < dist2)
-		{
-			xx = float(linepoint1[0]);
-			yy = float(linepoint1[1]);
-			segdist = sqrt(dist1);
-		}
-		else
-		{
-			xx = float(linepoint2[0]);
-			yy = float(linepoint2[0]);
-			segdist = sqrt(dist2);
-		}
-	}
-	return segdist;
+    float dist1 = float((point[0]-linepoint1[0])*(point[0]-linepoint1[0]) + (point[1]-linepoint1[1])*(point[1]-linepoint1[1]));
+    float dist2 = float((point[0]-linepoint2[0])*(point[0]-linepoint2[0]) + (point[1]-linepoint2[1])*(point[1]-linepoint2[1]));
+    if (dist1 < dist2)
+    {
+      xx = float(linepoint1[0]);
+      yy = float(linepoint1[1]);
+      segdist = sqrt(dist1);
+    }
+    else
+    {
+      xx = float(linepoint2[0]);
+      yy = float(linepoint2[0]);
+      segdist = sqrt(dist2);
+    }
+  }
+  return segdist;
 }
 //classify point of mouse hit point
 //0 not valid , 1 on the key, 2 on the line between two key
 int TransferFunction::_classify(int posx, int posy)
 {
-	int fposx = posx-offsetx;
-	int fposy = posy-offsety;
+  int fposx = posx-offsetx;
+  int fposy = posy-offsety;
 
-	std::list<Key>::iterator it = Keylist.begin();
-	//is it on the key?
-	for(; it!=Keylist.end(); it++)
-	{
-		if(abs(it->posx-fposx)<BIAS && abs(it->posy-fposy)<BIAS)
-		{
-			//updata current key
-			currentkey = it;
-			return 1;
-		}
-	}
+  std::list<Key>::iterator it = Keylist.begin();
+  //is it on the key?
+  for(; it!=Keylist.end(); it++)
+  {
+    if(abs(it->posx-fposx)<BIAS && abs(it->posy-fposy)<BIAS)
+    {
+      //updata current key
+      currentkey = it;
+      return 1;
+    }
+  }
 
-	//is it on the line between keys?
-	it = Keylist.begin();
-	std::list<Key>::iterator oldit = it;
-	it++;
-	int linepoint1[2], linepoint2[2], pos[2];
-	
-	for(; it!=Keylist.end(); it++)
-	{
-		linepoint1[0] = it->posx;
-		linepoint1[1] = it->posy;
-		linepoint2[0] = oldit->posx;
-		linepoint2[1] = oldit->posy;
-		pos[0] = fposx;
-		pos[1] = fposy;
+  //is it on the line between keys?
+  it = Keylist.begin();
+  std::list<Key>::iterator oldit = it;
+  it++;
+  int linepoint1[2], linepoint2[2], pos[2];
 
-		if(distancePointToLineSegment(linepoint1,linepoint2,pos)<BIAS)
-		{
-			//updata current key
-			currentkey = it;
-			return 2;
-		}
-		oldit = it;
-	}
-	return 0;
+  for(; it!=Keylist.end(); it++)
+  {
+    linepoint1[0] = it->posx;
+    linepoint1[1] = it->posy;
+    linepoint2[0] = oldit->posx;
+    linepoint2[1] = oldit->posy;
+    pos[0] = fposx;
+    pos[1] = fposy;
+
+    if(distancePointToLineSegment(linepoint1,linepoint2,pos)<BIAS)
+    {
+      //updata current key
+      currentkey = it;
+      return 2;
+    }
+    oldit = it;
+  }
+  return 0;
 }
 
 
 void TransferFunction::_generatecolorpalette()
 {
-	this->colorpalette = jet(256);
+  this->colorpalette = jet(256);
 
 }

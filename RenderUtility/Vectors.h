@@ -211,9 +211,9 @@ template <class T> VECTOR2<T> operator % ( T scalar, const VECTOR2<T>& vec ) {re
 template <class T>
 std::istream& operator >>(std::istream &is, VECTOR2<T>& v2)
 {
-	is >> v2[0];
-	is >> v2[1];
-	return is;
+  is >> v2[0];
+  is >> v2[1];
+  return is;
 }
 
 
@@ -378,10 +378,10 @@ template <class T> VECTOR3<T> operator % ( T scalar, const VECTOR3<T>& vec ) {re
 template <class T>
 std::istream& operator >>(std::istream &is, VECTOR3<T>& v3)
 {
-	is >> v3[0];
-	is >> v3[1];
-	is >> v3[2];
-	return is;
+  is >> v3[0];
+  is >> v3[1];
+  is >> v3[2];
+  return is;
 }
 
 template <class T=int> class VECTOR4 {
@@ -474,8 +474,8 @@ public:
        << std::setw(7) << std::setprecision(3) << v.w
        << "]";
  */
-	  os << v.x << '\t' << v.y << '\t' << v.z<< '\t' << v.w;
-	  return os;
+    os << v.x << '\t' << v.y << '\t' << v.z<< '\t' << v.w;
+    return os;
   }
 
 
@@ -954,11 +954,11 @@ public:
   }
 
   void Translation(VECTOR3<T> trans) {
-	  Translation(trans.x, trans.y, trans.z);
+    Translation(trans.x, trans.y, trans.z);
   }
 
   void Scaling(VECTOR3<T> scale) {
-	  Scaling(scale.x, scale.y, scale.z);
+    Scaling(scale.x, scale.y, scale.z);
   }
 
   void Translation(T x, T y, T z) {
@@ -1351,7 +1351,7 @@ public:
 
   QUATERNION4<T>(): x(0), y(0),z(0), w(0) {}
   QUATERNION4<T>(T _x, T _y, T _z, T _w): x(_x), y(_y), z(_z), w(_w) {}
-  QUATERNION4<T>(const T* other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
+  QUATERNION4<T>(const T& other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
 
   MATRIX4<T> ComputeRotation() {
     float n, s;
@@ -1424,201 +1424,201 @@ template <class T> static bool EpsilonEqual(T a, T b) {
 /// a PLANE is a VECTOR4 which is always normalized.
 template <class T> class PLANE : public VECTOR4<T> {
 public:
-	PLANE<T>(): VECTOR4<T>(0,0,0,0) {}
-	// plane from paramters (usually all 4 are given)
-	template <class S> explicit PLANE<T>( const std::vector<S>& v ) {
-		this->x = T(v.size()>0 ? v[0] : 0);
-		this->y = T(v.size()>1 ? v[1] : 0);
-		this->z = T(v.size()>2 ? v[2] : 0);
-		this->w = T(v.size()>3 ? v[3] : 0);
-	}
-	// plane from points
-	template <class S> explicit PLANE<T>( const VECTOR3<S>& v0, const VECTOR3<S>& v1, const VECTOR3<S>& v2 ) {
-		this->x =   T(v0.y) * (T(v1.z) - T(v2.z)) + T(v1.y) * (T(v2.z) - T(v0.z)) + T(v2.y) * (T(v0.z) - T(v1.z));
-		this->y =   T(v0.z) * (T(v1.x) - T(v2.x)) + T(v1.z) * (T(v2.x) - T(v0.x)) + T(v2.z) * (T(v0.x) - T(v1.x));
-		this->z =   T(v0.x) * (T(v1.y) - T(v2.y)) + T(v1.x) * (T(v2.y) - T(v0.y)) + T(v2.x) * (T(v0.y) - T(v1.y));
-		this->w = - (T(v0.x) * (T(v1.y) * T(v2.z) - T(v2.y) * T(v1.z)) +
-			T(v1.x) * (T(v2.y) * T(v0.z) - T(v0.y) * T(v2.z)) +
-			T(v2.x) * (T(v0.y) * T(v1.z) - T(v1.y) * T(v0.z)));
-	}
-	PLANE<T>(const VECTOR2<T> &other, const T _z, const T _w):
-	VECTOR4<T>(other, _z, _w) {}
-	PLANE<T>(const VECTOR3<T> &other, const T _w = 1): VECTOR4<T>(other, _w) {}
-	PLANE<T>(const VECTOR4<T> &other): VECTOR4<T>(other) {}
+  PLANE<T>(): VECTOR4<T>(0,0,0,0) {}
+  // plane from paramters (usually all 4 are given)
+  template <class S> explicit PLANE<T>( const std::vector<S>& v ) {
+    this->x = T(v.size()>0 ? v[0] : 0);
+    this->y = T(v.size()>1 ? v[1] : 0);
+    this->z = T(v.size()>2 ? v[2] : 0);
+    this->w = T(v.size()>3 ? v[3] : 0);
+  }
+  // plane from points
+  template <class S> explicit PLANE<T>( const VECTOR3<S>& v0, const VECTOR3<S>& v1, const VECTOR3<S>& v2 ) {
+    this->x =   T(v0.y) * (T(v1.z) - T(v2.z)) + T(v1.y) * (T(v2.z) - T(v0.z)) + T(v2.y) * (T(v0.z) - T(v1.z));
+    this->y =   T(v0.z) * (T(v1.x) - T(v2.x)) + T(v1.z) * (T(v2.x) - T(v0.x)) + T(v2.z) * (T(v0.x) - T(v1.x));
+    this->z =   T(v0.x) * (T(v1.y) - T(v2.y)) + T(v1.x) * (T(v2.y) - T(v0.y)) + T(v2.x) * (T(v0.y) - T(v1.y));
+    this->w = - (T(v0.x) * (T(v1.y) * T(v2.z) - T(v2.y) * T(v1.z)) +
+      T(v1.x) * (T(v2.y) * T(v0.z) - T(v0.y) * T(v2.z)) +
+      T(v2.x) * (T(v0.y) * T(v1.z) - T(v1.y) * T(v0.z)));
+  }
+  PLANE<T>(const VECTOR2<T> &other, const T _z, const T _w):
+  VECTOR4<T>(other, _z, _w) {}
+  PLANE<T>(const VECTOR3<T> &other, const T _w = 1): VECTOR4<T>(other, _w) {}
+  PLANE<T>(const VECTOR4<T> &other): VECTOR4<T>(other) {}
 
-	template <class S> explicit PLANE<T>(const PLANE<S> &other):
-	VECTOR4<T>(other) {}
+  template <class S> explicit PLANE<T>(const PLANE<S> &other):
+  VECTOR4<T>(other) {}
 
-	PLANE<T>(const T _x, const T _y, const T _z, const T _w) :
-	VECTOR4<T>(_x,_y,_z,_w) {}
-	PLANE<T>(const T* vec) : VECTOR4<T>(vec) {}
+  PLANE<T>(const T _x, const T _y, const T _z, const T _w) :
+  VECTOR4<T>(_x,_y,_z,_w) {}
+  PLANE<T>(const T* vec) : VECTOR4<T>(vec) {}
 
-	/// @return true if the given point is clipped by this plane.
-	bool clip(VECTOR3<T> point) const {
-		return ((FLOATVECTOR4::xyz() ^ point)+this->w >= 0);
-	}
+  /// @return true if the given point is clipped by this plane.
+  bool clip(VECTOR3<T> point) const {
+    return ((FLOATVECTOR4::xyz() ^ point)+this->w >= 0);
+  }
 
-	/// Transform the plane by the given matrix.
-	void transform(const MATRIX4<T> &m) {
-		FLOATMATRIX4 mIT(m.inverse());
-		mIT = mIT.Transpose();
-		transformIT(mIT);
-	}
+  /// Transform the plane by the given matrix.
+  void transform(const MATRIX4<T> &m) {
+    FLOATMATRIX4 mIT(m.inverse());
+    mIT = mIT.Transpose();
+    transformIT(mIT);
+  }
 
-	/// Transform the plane by the inverse transpose of the given matrix.
-	void transformIT(const MATRIX4<T> &M) {
-		(*this) = FLOATVECTOR4::operator*(M);
-		normalize();
-	}
+  /// Transform the plane by the inverse transpose of the given matrix.
+  void transformIT(const MATRIX4<T> &M) {
+    (*this) = FLOATVECTOR4::operator*(M);
+    normalize();
+  }
 
-	void normalize() {
-		const T x = this->x;
-		const T y = this->y;
-		const T z = this->z;
-		T length = sqrt(x*x + y*y + z*z);
-		(*this) /= length;
-	}
-	T d() const { return this->w; }
-	VECTOR3<T> normal() { return this->xyz(); }
+  void normalize() {
+    const T x = this->x;
+    const T y = this->y;
+    const T z = this->z;
+    T length = sqrt(x*x + y*y + z*z);
+    (*this) /= length;
+  }
+  T d() const { return this->w; }
+  VECTOR3<T> normal() { return this->xyz(); }
 
-	// binary operators with a matrix
-	PLANE<T> operator * ( const MATRIX4<T>& matrix ) const {
-		PLANE<T> tmp(*this);
-		tmp.transform(matrix);
-		return tmp;
-	}
+  // binary operators with a matrix
+  PLANE<T> operator * ( const MATRIX4<T>& matrix ) const {
+    PLANE<T> tmp(*this);
+    tmp.transform(matrix);
+    return tmp;
+  }
 
-	/// Determine the intersection point of the plane and a line `ab'.
-	/// @return whether or not the two intersect.  If false, `hit' will not be
-	///         valid.
-	bool intersect(const VECTOR3<T>& a, const VECTOR3<T>& b,
-		VECTOR3<T>& hit) const {
-			T t;
-			bool bIntersect = intersect(a,b,t);
-			if (!bIntersect) return false;
-			hit = a + (t*(b - a));
-			return true;
-	}
+  /// Determine the intersection point of the plane and a line `ab'.
+  /// @return whether or not the two intersect.  If false, `hit' will not be
+  ///         valid.
+  bool intersect(const VECTOR3<T>& a, const VECTOR3<T>& b,
+    VECTOR3<T>& hit) const {
+      T t;
+      bool bIntersect = intersect(a,b,t);
+      if (!bIntersect) return false;
+      hit = a + (t*(b - a));
+      return true;
+  }
 
-	/// Determine the parametric intersection point of the plane and a line `ab'.
-	/// @return whether or not the two intersect.  If false, `hit' will not be
-	///         valid.
-	bool intersect(const VECTOR3<T>& a, const VECTOR3<T>& b,
-		T& hit) const {
-			const T denom = (*this) ^ (a - b);
-			if(EpsilonEqual(denom, 0.0f)) {
-				return false;
-			}
-			hit = (((*this) ^ a) + this->d()) / denom;
-			return true;
-	}
+  /// Determine the parametric intersection point of the plane and a line `ab'.
+  /// @return whether or not the two intersect.  If false, `hit' will not be
+  ///         valid.
+  bool intersect(const VECTOR3<T>& a, const VECTOR3<T>& b,
+    T& hit) const {
+      const T denom = (*this) ^ (a - b);
+      if(EpsilonEqual(denom, 0.0f)) {
+        return false;
+      }
+      hit = (((*this) ^ a) + this->d()) / denom;
+      return true;
+  }
 
 };
 // Structure describing blob from affine adaption
 struct AffineBlob
 {
-	FLOATVECTOR3	vCenter;
-	FLOATVECTOR3    vEigenValues;
-	float			fMaxAxis;	// The longest axis
-	FLOATMATRIX3			matRotation;	
+  FLOATVECTOR3	vCenter;
+  FLOATVECTOR3    vEigenValues;
+  float			fMaxAxis;	// The longest axis
+  FLOATMATRIX3			matRotation;
 };
 
 struct Marker
 {
-	FLOATVECTOR2 startPos;
-	FLOATVECTOR2 endPos;
-	int          value;
-	bool         horizontal;
+  FLOATVECTOR2 startPos;
+  FLOATVECTOR2 endPos;
+  int          value;
+  bool         horizontal;
 };
 
-struct AABB2D 
+struct AABB2D
 {
-	FLOATVECTOR2 vMin;
-	FLOATVECTOR2 vMax;
+  FLOATVECTOR2 vMin;
+  FLOATVECTOR2 vMax;
 };
 
 struct UINT64AABB3D
 {
-	UINT64VECTOR3 vMin;
-	UINT64VECTOR3 vMax;
+  UINT64VECTOR3 vMin;
+  UINT64VECTOR3 vMax;
 };
 
 struct FLOATAABB3D
 {
-	FLOATVECTOR3 vMin;
-	FLOATVECTOR3 vMax;
+  FLOATVECTOR3 vMin;
+  FLOATVECTOR3 vMax;
 };
 
 class Brick {
 public:
-	Brick() :
-	  vCenter(0,0,0),
-		  vExtension(0,0,0),
-		  vVoxelCount(0, 0, 0),
-		  vCoords(0,0,0),
-		  fDistance(0),
-		  bIsEmpty(false)
-	  {
-	  }
+  Brick() :
+    vCenter(0,0,0),
+      vExtension(0,0,0),
+      vVoxelCount(0, 0, 0),
+      vCoords(0,0,0),
+      fDistance(0),
+      bIsEmpty(false)
+    {
+    }
 
-	  Brick(UINT32 x, UINT32 y, UINT32 z,
-		  UINT32 iSizeX, UINT32 iSizeY, UINT32 iSizeZ) :
-	  vCenter(0,0,0),
-		  vExtension(0,0,0),
-		  vVoxelCount(iSizeX, iSizeY, iSizeZ),
-		  vCoords(x,y,z),
-		  fDistance(0),
-		  bIsEmpty(false) 
-	  {
-	  }
+    Brick(UINT32 x, UINT32 y, UINT32 z,
+      UINT32 iSizeX, UINT32 iSizeY, UINT32 iSizeZ) :
+    vCenter(0,0,0),
+      vExtension(0,0,0),
+      vVoxelCount(iSizeX, iSizeY, iSizeZ),
+      vCoords(x,y,z),
+      fDistance(0),
+      bIsEmpty(false)
+    {
+    }
 
-	  FLOATVECTOR3 vCenter;
-	  FLOATVECTOR3 vTexcoordsMin;
-	  FLOATVECTOR3 vTexcoordsMax;
-	  FLOATVECTOR3 vExtension;
-	  UINTVECTOR3 vVoxelCount;
-	  UINTVECTOR3 vCoords;
-	  float fDistance;
-	  bool bIsEmpty;
+    FLOATVECTOR3 vCenter;
+    FLOATVECTOR3 vTexcoordsMin;
+    FLOATVECTOR3 vTexcoordsMax;
+    FLOATVECTOR3 vExtension;
+    UINTVECTOR3 vVoxelCount;
+    UINTVECTOR3 vCoords;
+    float fDistance;
+    bool bIsEmpty;
 };
 
 inline bool operator < (const Brick& left, const Brick& right) {
-	if  (left.fDistance < right.fDistance) return true;
-	return false;
+  if  (left.fDistance < right.fDistance) return true;
+  return false;
 }
 
 enum EWindowMode {
-	WM_SAGITTAL = 0, // It is showing x slice
-	WM_CORONAL  = 1, // Shows y slice
-	WM_AXIAL    = 2, // Shows z slice
-	WM_3D,
-	WM_INVALID
+  WM_SAGITTAL = 0, // It is showing x slice
+  WM_CORONAL  = 1, // Shows y slice
+  WM_AXIAL    = 2, // Shows z slice
+  WM_3D,
+  WM_INVALID
 };
 
 typedef PLANE<float>  FLOATPLANE;
 typedef PLANE<double> DOUBLEPLANE;
 
 // A crappy structure to avoid sending GLTexture across projects.
-class TextureInfo 
+class TextureInfo
 {
 public:
-	TextureInfo():
-		size(0, 0, 0),
-		sizePerElement(0),
-		format(0),
-		internalFormat(0),
-		type(0),
-		data(0),
-		totalElements(0)
-	{}
+  TextureInfo():
+    size(0, 0, 0),
+    sizePerElement(0),
+    format(0),
+    internalFormat(0),
+    type(0),
+    data(0),
+    totalElements(0)
+  {}
 
-	UINTVECTOR3    size;
-	UINT32         sizePerElement;
-	UINT32         format;
-	int            internalFormat;
-	UINT32         type;
-	unsigned char* data;
-	UINT64         totalElements; // How many voxels are contained in a histogram texture? Only used when passing histogram textures.
+  UINTVECTOR3    size;
+  UINT32         sizePerElement;
+  UINT32         format;
+  int            internalFormat;
+  UINT32         type;
+  unsigned char* data;
+  UINT64         totalElements; // How many voxels are contained in a histogram texture? Only used when passing histogram textures.
 
 };
 
@@ -1628,18 +1628,18 @@ class GLTextureArray1D;
 class HistogramImagesInfo
 {
 public:
-	HistogramImagesInfo():
-	  histogramTex(NULL),
-	  histogramCountTex(NULL),
-	  histogram1DArrayTex(NULL),
-	  deepIdTex(NULL)
-	  {}
+  HistogramImagesInfo():
+    histogramTex(NULL),
+    histogramCountTex(NULL),
+    histogram1DArrayTex(NULL),
+    deepIdTex(NULL)
+    {}
 
-	GLTextureArray2D* histogramTex;         // joint conditional histogram texture
-	GLTexture2D*      histogramCountTex;    // cond histo count texture
-	GLTextureArray1D* histogram1DArrayTex;  // Simply 1D histograms for all axises used in unconditional histograms computation.
-	GLTextureArray2D* deepIdTex;            // deep id texture used in multivariate2d mode
-	FLOATVECTOR4      color;
+  GLTextureArray2D* histogramTex;         // joint conditional histogram texture
+  GLTexture2D*      histogramCountTex;    // cond histo count texture
+  GLTextureArray1D* histogram1DArrayTex;  // Simply 1D histograms for all axises used in unconditional histograms computation.
+  GLTextureArray2D* deepIdTex;            // deep id texture used in multivariate2d mode
+  FLOATVECTOR4      color;
 
 };
 
@@ -1648,59 +1648,59 @@ class GLFBOTex;
 class MultivariateTFInfo
 {
 public:
-	GLTextureArray1D* multivariateTFTex;  // The TF texture
-	GLFBOTex*         fboTex;             // 2d fbo version of the tf texture
-	float*            weights;            // The weight of each axises
+  GLTextureArray1D* multivariateTFTex;  // The TF texture
+  GLFBOTex*         fboTex;             // 2d fbo version of the tf texture
+  float*            weights;            // The weight of each axises
 };
 
 class MultigroupTFInfo
 {
 public:
-	GLTextureArray2D* multigroupMTFTex;
-	GLFBOTex*         idMapTex;
-	size_t            groupNum;
+  GLTextureArray2D* multigroupMTFTex;
+  GLFBOTex*         idMapTex;
+  size_t            groupNum;
 };
 
 class GLFBO3DTex;
 class MultivariateTF2DInfo
 {
 public:
-	GLTextureArray2D* multivariateTF2DTex; // The 2D TF texture array
-	GLTextureArray2D* deepIdMapTex;        // The id map 2d texture array 
-	int               widgetID;            // deep widget id
+  GLTextureArray2D* multivariateTF2DTex; // The 2D TF texture array
+  GLTextureArray2D* deepIdMapTex;        // The id map 2d texture array
+  int               widgetID;            // deep widget id
 };
 
 class MultivariateGaussTFInfo
 {
 public:
-	MultivariateGaussTFInfo(): gaussMeans(NULL), gaussSD(NULL){}
+  MultivariateGaussTFInfo(): gaussMeans(NULL), gaussSD(NULL){}
 
-	~MultivariateGaussTFInfo()
-	{
-		SAFE_DELETE_ARRAY(gaussSD);
-		SAFE_DELETE_ARRAY(gaussMeans);
-	}
-	FLOATVECTOR4      gaussColor;
-	float*            gaussMeans; // mean
-	float*            gaussSD;    // standard deviation
-	size_t            groupNum;
+  ~MultivariateGaussTFInfo()
+  {
+    SAFE_DELETE_ARRAY(gaussSD);
+    SAFE_DELETE_ARRAY(gaussMeans);
+  }
+  FLOATVECTOR4      gaussColor;
+  float*            gaussMeans; // mean
+  float*            gaussSD;    // standard deviation
+  size_t            groupNum;
 };
 
 struct PVertex2D
 {
-	FLOATVECTOR2 pos;
+  FLOATVECTOR2 pos;
 };
 
 struct PIVertex2D
 {
-	FLOATVECTOR2 pos;
-	float        intensity;
+  FLOATVECTOR2 pos;
+  float        intensity;
 };
 
 struct PCVertex2D
 {
-	FLOATVECTOR2 pos;
-	FLOATVECTOR4 color;
+  FLOATVECTOR2 pos;
+  FLOATVECTOR4 color;
 };
 
 #endif // VECTORS_H

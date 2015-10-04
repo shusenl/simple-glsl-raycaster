@@ -38,9 +38,7 @@ private:
   char* buffer;
   GLint len;
 
-
 };
-
 
 
 #endif

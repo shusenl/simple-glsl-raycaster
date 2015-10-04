@@ -45,11 +45,11 @@ ArcBall::ArcBall(int iWinWidth, int iWinHeight, int iWinOffsetX, int iWinOffsetY
     m_iWinOffsets(iWinOffsetX, iWinOffsetY),
     m_fRadius(1.0f),
     m_bUseTranslation(bUseTranslation),
-	m_IsLBdown(false), m_IsMBdown(false), m_IsRBdown(false)
+  m_IsLBdown(false), m_IsMBdown(false), m_IsRBdown(false)
 {
-	m_translateVec[0]=0;
-	m_translateVec[1]=0;
-	m_translateVec[2]=0;
+  m_translateVec[0]=0;
+  m_translateVec[1]=0;
+  m_translateVec[2]=0;
 }
 
 void ArcBall::SetWindowSize(int iWinWidth, int iWinHeight) {
@@ -130,66 +130,66 @@ FLOATVECTOR3 ArcBall::MapToSphere(INTVECTOR2 vPosition) const {
 //=======
 void 	ArcBall::OnMouseMove (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	if(m_IsLBdown)
-	{
-		Drag(vp);
-	}
+  INTVECTOR2 vp(x,y);
+  if(m_IsLBdown)
+  {
+    Drag(vp);
+  }
 
-	//TODO the moving is too slow when the object is far away from camera
- 	if(m_IsMBdown)
-	{
-		//translate rotate
-		//uint !!!! big time
-		m_translateVec[0] += float(float(vp.x)/float(m_iWinDim.x) - float(m_lastPosition.x)/float(m_iWinDim.x));
-		m_translateVec[1] -= float(float(vp.y)/float(m_iWinDim.y) - float(m_lastPosition.y)/float(m_iWinDim.y));
+  //TODO the moving is too slow when the object is far away from camera
+  if(m_IsMBdown)
+  {
+    //translate rotate
+    //uint !!!! big time
+    m_translateVec[0] += float(float(vp.x)/float(m_iWinDim.x) - float(m_lastPosition.x)/float(m_iWinDim.x));
+    m_translateVec[1] -= float(float(vp.y)/float(m_iWinDim.y) - float(m_lastPosition.y)/float(m_iWinDim.y));
 
-		m_lastPosition = vp;
-	}
+    m_lastPosition = vp;
+  }
 
-	if(m_IsRBdown)
-	{
-		if(y-m_lastPosition.y > 0)
-			m_translateVec[2] -= 3*float(y-m_lastPosition.y)/float(m_iWinDim.y);
-		else if(y-m_lastPosition.y<0)
-			m_translateVec[2] += 3*float(m_lastPosition.y-y)/float(m_iWinDim.y);
+  if(m_IsRBdown)
+  {
+    if(y-m_lastPosition.y > 0)
+      m_translateVec[2] -= 3*float(y-m_lastPosition.y)/float(m_iWinDim.y);
+    else if(y-m_lastPosition.y<0)
+      m_translateVec[2] += 3*float(m_lastPosition.y-y)/float(m_iWinDim.y);
 
-		m_lastPosition = vp;
-	}
+    m_lastPosition = vp;
+  }
 
 }
 
 void 	ArcBall::OnLeftButtonDown (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsLBdown = true;
-	Click(vp);
+  INTVECTOR2 vp(x,y);
+  m_IsLBdown = true;
+  Click(vp);
 }
 void 	ArcBall::OnMiddleButtonDown (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsMBdown = true;
-	m_lastPosition = vp;
+  INTVECTOR2 vp(x,y);
+  m_IsMBdown = true;
+  m_lastPosition = vp;
 }
 void 	ArcBall::OnRightButtonDown (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsRBdown = true;
-	m_lastPosition = vp;
+  INTVECTOR2 vp(x,y);
+  m_IsRBdown = true;
+  m_lastPosition = vp;
 }
 //Up============================
 void 	ArcBall::OnLeftButtonUp (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsLBdown = false;
+  INTVECTOR2 vp(x,y);
+  m_IsLBdown = false;
 }
 void 	ArcBall::OnMiddleButtonUp (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsMBdown = false;
+  INTVECTOR2 vp(x,y);
+  m_IsMBdown = false;
 }
 void 	ArcBall::OnRightButtonUp (int x, int y)
 {
-	INTVECTOR2 vp(x,y);
-	m_IsRBdown = false;
+  INTVECTOR2 vp(x,y);
+  m_IsRBdown = false;
 }

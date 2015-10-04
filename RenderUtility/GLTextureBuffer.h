@@ -5,59 +5,60 @@
 #include <GL/glew.h>
 
 /*
-	stand alone class the user need not use GLBufferObject or GLTexture by the user
+  stand alone class the user need not use GLBufferObject or GLTexture by the user
 
 ex.
-	in shader 
-	uniform samplerBuffer SamplerBuffer;
-	vec4 v = texelFetchBuffer(SampleBuffer, index);
+  in shader
+  uniform samplerBuffer SamplerBuffer;
+  vec4 v = texelFetchBuffer(SampleBuffer, index);
 
-	
+
 */
+
 template<typename T>
 class GLTextureBuffer
 {
 public:
-	GLTextureBuffer(GLenum internalFormat, size_t length, T* data=NULL, GLenum usage=GL_STATIC_DRAW);
-	~GLTextureBuffer();
-	void UpdateBuffer(T* data, size_t size);
-	GLenum GetTextureBufferID(){return _texID;}
+  GLTextureBuffer(GLenum internalFormat, size_t length, T* data=NULL, GLenum usage=GL_STATIC_DRAW);
+  ~GLTextureBuffer();
+  void UpdateBuffer(T* data, size_t size);
+  GLenum GetTextureBufferID(){return _texID;}
 
-	void Bind();
+  void Bind();
 
 private:
-	GLenum _internalFormat;
-	size_t _size;
-	GLuint _bufferID, _texID;
-	GLenum _usage;
+  GLenum _internalFormat;
+  size_t _size;
+  GLuint _bufferID, _texID;
+  GLenum _usage;
 
 
-};	   
+};
 
 template<typename T>
 GLTextureBuffer<T>::GLTextureBuffer(GLenum internalFormat, size_t length, T* data, GLenum usage)
 :_internalFormat(internalFormat),
 _size(length)
 {
-	//create buffer
-	_usage = usage;
-	glGenBuffers(1, &_bufferID );
-	glBindBuffer(GL_TEXTURE_BUFFER_EXT, _bufferID);
-	glBufferData(GL_TEXTURE_BUFFER_EXT, sizeof(T)*_size, data, usage);
+  //create buffer
+  _usage = usage;
+  glGenBuffers(1, &_bufferID );
+  glBindBuffer(GL_TEXTURE_BUFFER_EXT, _bufferID);
+  glBufferData(GL_TEXTURE_BUFFER_EXT, sizeof(T)*_size, data, usage);
 
-	glGenTextures(1, &_texID);
-	glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
-	glTexBufferEXT(GL_TEXTURE_BUFFER_EXT, internalFormat, _bufferID);
+  glGenTextures(1, &_texID);
+  glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
+  glTexBufferEXT(GL_TEXTURE_BUFFER_EXT, internalFormat, _bufferID);
 
-	GL::CheckErrors();
+  GL::CheckErrors();
 
 }
 
 template<typename T>
 GLTextureBuffer<T>::~GLTextureBuffer()
 {
-	glDeleteBuffers(1, &_bufferID);
-	glDeleteTextures(1, &_texID);
+  glDeleteBuffers(1, &_bufferID);
+  glDeleteTextures(1, &_texID);
 }
 
 
@@ -65,20 +66,20 @@ GLTextureBuffer<T>::~GLTextureBuffer()
 template<typename T>
 void GLTextureBuffer<T>::UpdateBuffer(T* data, size_t size)
 {
-	_size = size;
-	glBindBuffer(GL_TEXTURE_BUFFER_EXT, _bufferID);
-	glBufferData(GL_TEXTURE_BUFFER_EXT, sizeof(T)*_size,data, _usage);
+  _size = size;
+  glBindBuffer(GL_TEXTURE_BUFFER_EXT, _bufferID);
+  glBufferData(GL_TEXTURE_BUFFER_EXT, sizeof(T)*_size,data, _usage);
 
-	glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
-	glTexBufferEXT(GL_TEXTURE_BUFFER_EXT, _internalFormat, _bufferID);
+  glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
+  glTexBufferEXT(GL_TEXTURE_BUFFER_EXT, _internalFormat, _bufferID);
 
-	GL::CheckErrors();
+  GL::CheckErrors();
 }
 
 template<typename T>
 void GLTextureBuffer<T>::Bind()
 {
-	glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
+  glBindTexture(GL_TEXTURE_BUFFER_EXT, _texID);
 }
 
 

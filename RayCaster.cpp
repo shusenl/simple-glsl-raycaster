@@ -22,24 +22,24 @@ _transVec(VECTOR3<float>())
 
 RayCaster::~RayCaster()
 {
-	if(texBlockPool)
-		delete texBlockPool;
-	if(texNodePool3D)
-		delete texNodePool3D;	
+  if(texBlockPool)
+    delete texBlockPool;
+  if(texNodePool3D)
+    delete texNodePool3D;
 
 }
 void RayCaster::ReLoadShader()
 {
    _simpleProg.MakeProgramFromString(
-     GLSLProgram::LoadShaderToString("ScreenAlignQuad_Vert.glsl"), 
+     GLSLProgram::LoadShaderToString("ScreenAlignQuad_Vert.glsl"),
      GLSLProgram::LoadShaderToString("Raycast_ScreenAlign_Frag.glsl"));
 
    _renderTo3Dtex.MakeProgramFromString(
-     GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"), 
+     GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"),
      GLSLProgram::LoadShaderToString("shadowVolume_Frag.glsl"));
 
   //_testProgram.MakeProgramFromString(
-     //GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"), 
+     //GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"),
      //GLSLProgram::LoadShaderToString("TestFrag.glsl"));
 
 }
@@ -50,7 +50,7 @@ void RayCaster::Init(int width, int height)
 
   _width = width;
   _height = height;
-  _aspectRatio = float(width)/float(height);  
+  _aspectRatio = float(width)/float(height);
 
   glInitStatus status;
   GL::InitGLStatus(status); //enable unaligned texture uploading
@@ -67,7 +67,7 @@ void RayCaster::Resize(int width, int height)
 {
   _width = width;
   _height = height;
-  _aspectRatio = float(width)/float(height);  
+  _aspectRatio = float(width)/float(height);
 }
 
 bool RayCaster::LoadShader(std::string* VertString  ,std::string* FragString)
@@ -78,17 +78,17 @@ bool RayCaster::LoadShader(std::string* VertString  ,std::string* FragString)
 }
 void transposeMatrixvf( float *input,  float *output)
 {
-	output[0]=input[0]; output[1]=input[4]; output[2]=input[8];output[3]=input[12];
-	output[4]=input[1]; output[5]=input[5]; output[6]=input[9];output[7]=input[13];
-	output[8]=input[2]; output[9]=input[6]; output[10]=input[10];output[11]=input[14];
-	output[12]=input[3]; output[13]=input[7]; output[14]=input[11];output[15]=input[15];
+  output[0]=input[0]; output[1]=input[4]; output[2]=input[8];output[3]=input[12];
+  output[4]=input[1]; output[5]=input[5]; output[6]=input[9];output[7]=input[13];
+  output[8]=input[2]; output[9]=input[6]; output[10]=input[10];output[11]=input[14];
+  output[12]=input[3]; output[13]=input[7]; output[14]=input[11];output[15]=input[15];
 }
 void RayCaster::Render()
 {
 
   glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	GLfloat invRotationMatrix[16];
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  GLfloat invRotationMatrix[16];
   MATRIX4<float> Rot(arcBall->GetRotation().array);
   _newRot=_oldRot*Rot;
 
@@ -96,35 +96,35 @@ void RayCaster::Render()
 
   GL::SetupOrthogonalView(0,0, _width, _height, -1,1,-1,1);
 
-	_simpleProg.BeginProgram();
-	//define geometry 每 full screen quad (depth at -1.0 : view direction is always with negative z-axis in OpenGL!)
+  _simpleProg.BeginProgram();
+  //define geometry 每 full screen quad (depth at -1.0 : view direction is always with negative z-axis in OpenGL!)
   _newTransVec = _transVec + VECTOR3<float>(arcBall->GetTranslationVec());
 
-	_simpleProg.setUniformMatf("rotMat4", invRotationMatrix);
+  _simpleProg.setUniformMatf("rotMat4", invRotationMatrix);
   _simpleProg.setUniform3f("cameraO", _O);
   _simpleProg.setUniform3f("cameraDir", _Dir);
   _simpleProg.setUniform3f("cameraUp", _Up);
 
   _simpleProg.setUniform1f("stepsize", _paraS.stepsize);
-	_simpleProg.setUniform1f("aspectRatio",_aspectRatio);
+  _simpleProg.setUniform1f("aspectRatio",_aspectRatio);
   _simpleProg.setUniform1f("insideView", (float)_paraS.cameraMode);
   _simpleProg.setUniform3f("translateVec3", &_newTransVec.x );
 
-	_simpleProg.setUniform1f("sizeX", float(_sizeX));
-	_simpleProg.setUniform1f("sizeY", float(_sizeY));
-	_simpleProg.setUniform1f("sizeZ", float(_sizeZ));
+  _simpleProg.setUniform1f("sizeX", float(_sizeX));
+  _simpleProg.setUniform1f("sizeY", float(_sizeY));
+  _simpleProg.setUniform1f("sizeZ", float(_sizeZ));
   _simpleProg.setUniform1f("renderMode", float(_paraS.renderMode));
   _simpleProg.setUniform1f("isPreIntegration", float(_paraS.preIntegration));
 
 //don't use GL_TEXTURE0 !!!! WHY????
-  _simpleProg.BindTexture(1,GL_TEXTURE_1D,_CDFlut,"CDFtranf");  
-	_simpleProg.BindTexture(2,GL_TEXTURE_1D,_lut,"tranf");
+  _simpleProg.BindTexture(1,GL_TEXTURE_1D,_CDFlut,"CDFtranf");
+  _simpleProg.BindTexture(2,GL_TEXTURE_1D,_lut,"tranf");
   _simpleProg.BindTexture(3, texBlockPool->GetTextureType(), texBlockPool->GetTextureID(),"blockPool");
   _simpleProg.BindTexture(4,GL_TEXTURE_2D,_preInt2D,"preInt2D");
 
-	GL::DrawFullScreenQuadNegativeOneToOne();
-	
-	_simpleProg.EndProgram();
+  GL::DrawFullScreenQuadNegativeOneToOne();
+
+  _simpleProg.EndProgram();
   GL::CheckErrors();
 }
 
@@ -134,8 +134,8 @@ void RayCaster::RenderShadow()
     return;
 
   glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	GLfloat invRotationMatrix[16];
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  GLfloat invRotationMatrix[16];
   MATRIX4<float> Rot(arcBall->GetRotation().array);
   _newRot=_oldRot*Rot;
 
@@ -145,28 +145,28 @@ void RayCaster::RenderShadow()
 
   _newTransVec = _transVec + VECTOR3<float>(arcBall->GetTranslationVec());
 
-	_simpleProg.BeginProgram();
-	//define geometry 每 full screen quad (depth at -1.0 : view direction is always with negative z-axis in OpenGL!)
-	_simpleProg.setUniformMatf("rotMat4", invRotationMatrix);
+  _simpleProg.BeginProgram();
+  //define geometry 每 full screen quad (depth at -1.0 : view direction is always with negative z-axis in OpenGL!)
+  _simpleProg.setUniformMatf("rotMat4", invRotationMatrix);
   _simpleProg.setUniform3f("cameraO", _O);
   _simpleProg.setUniform3f("cameraDir", _Dir);
   _simpleProg.setUniform3f("cameraUp", _Up);
 
   _simpleProg.setUniform1f("stepsize", _paraS.stepsize);
-	_simpleProg.setUniform1f("aspectRatio",_aspectRatio);
+  _simpleProg.setUniform1f("aspectRatio",_aspectRatio);
   _simpleProg.setUniform1f("insideView", (float)_paraS.cameraMode);
   _simpleProg.setUniform3f("translateVec3", &_newTransVec.x);
 
-	_simpleProg.setUniform1f("sizeX", float(_sizeX));
-	_simpleProg.setUniform1f("sizeY", float(_sizeY));
-	_simpleProg.setUniform1f("sizeZ", float(_sizeZ));
+  _simpleProg.setUniform1f("sizeX", float(_sizeX));
+  _simpleProg.setUniform1f("sizeY", float(_sizeY));
+  _simpleProg.setUniform1f("sizeZ", float(_sizeZ));
 
   _simpleProg.setUniform1f("renderMode", float(_paraS.renderMode));
   _simpleProg.setUniform1f("isPreIntegration", float(_paraS.preIntegration));
 
 
   _simpleProg.BindTexture(1,GL_TEXTURE_1D,_CDFlut,"CDFtranf");
-	_simpleProg.BindTexture(2,GL_TEXTURE_1D,_lut,"tranf");
+  _simpleProg.BindTexture(2,GL_TEXTURE_1D,_lut,"tranf");
 
   _simpleProg.BindTexture(3, _shadowTex->GetTextureType(), _shadowTex->GetTextureID(),"shadowVolume");
   _simpleProg.BindTexture(4, texBlockPool->GetTextureType(), texBlockPool->GetTextureID(),"blockPool");
@@ -174,9 +174,9 @@ void RayCaster::RenderShadow()
 
 //printf("_CDFlut:%d", _CDFlut);
 
-	GL::DrawFullScreenQuadNegativeOneToOne();
-	
-	_simpleProg.EndProgram();
+  GL::DrawFullScreenQuadNegativeOneToOne();
+
+  _simpleProg.EndProgram();
   GL::CheckErrors();
 }
 
@@ -194,9 +194,9 @@ void RayCaster::TestRender()
 {
   _testProgram.BeginProgram();
   _testProgram.BindTexture(1,GL_TEXTURE_1D,_CDFlut,"CDFtranf");
-	GL::DrawFullScreenQuadNegativeOneToOne();
+  GL::DrawFullScreenQuadNegativeOneToOne();
   _testProgram.EndProgram();
-  
+
 }
 
 void RayCaster::UpdateShadowVolume()
@@ -276,7 +276,7 @@ void RayCaster::LoadRendererSetting(const char* filename)
   infile>>_oldRot;
   infile>>_transVec;
   infile>>_paraS.stepsize;//pass a pointer instead of the struct
-  
+
 
 }
 
