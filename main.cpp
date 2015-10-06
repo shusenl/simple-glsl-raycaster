@@ -304,7 +304,7 @@ int main(int argc, char* argv[])
   renderPara.viewportX = 800; renderPara.viewportY = 800;
 
   //example command line:
-  // ./SimpleRayCaster -dims 256x256x256 -filename ~/gitRepo/lagacy/simple-glsl-raycaster/head256X256X256.raw
+  //./SimpleRayCaster -dims 256x256x256 -filename ../../head256X256X256.raw
   if(!parameterParser(argc,argv, renderPara))
   {
     printf("Error in the input parameters!\n");

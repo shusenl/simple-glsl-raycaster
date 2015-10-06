@@ -9,5 +9,8 @@ keyboard binding
 - key(-)  : decrease stepsize
 - key(=)  : increase stepsize
 
+Example Commandline
+- ./SimpleRayCaster -dims 256x256x256 -filename ../../head256X256X256.raw
+
 ![Partilce Guided](https://github.com/shusenl/simple-glsl-raycaster/blob/master/simpleRaycaster.png "Particle Guided:")
 
