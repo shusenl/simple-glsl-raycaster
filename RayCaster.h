@@ -31,7 +31,7 @@ struct parameterShading
 
   parameterShading()
   {
-    stepsize = 0.01f;
+    stepsize = 0.002f;
     cameraMode = 1;
     renderMode = 0;//0 normal; 1 volume shadow
     showVol = 0;

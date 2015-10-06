@@ -22,7 +22,7 @@ float light_rotate[16] ={1, 0, 0, 0,
 
 
 int window_id = 0;
-float stepsize = 0.0081;
+float stepsize = 0.002;
 float var = 0.008;
 float integralMethod = 1;
 float isovalue = 0.2;
@@ -47,7 +47,7 @@ void display()
   raycaster->SetShadingParameters(paraS);
 
   //get the ray direction from arcBall
-  VECTOR3<float> dir(0,0,-1);
+  VECTOR3<float> dir(0,0,-3);
   dir = raycaster->arcBall->GetRotation()*dir;
   dir.normalize();
   Dir[0] = dir.x; Dir[1] = dir.y; Dir[2] = dir.z;
@@ -303,6 +303,8 @@ int main(int argc, char* argv[])
   //defaults
   renderPara.viewportX = 800; renderPara.viewportY = 800;
 
+  //example command line:
+  // ./SimpleRayCaster -dims 256x256x256 -filename ~/gitRepo/lagacy/simple-glsl-raycaster/head256X256X256.raw
   if(!parameterParser(argc,argv, renderPara))
   {
     printf("Error in the input parameters!\n");
