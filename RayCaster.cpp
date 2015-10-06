@@ -37,11 +37,6 @@ void RayCaster::ReLoadShader()
    _renderTo3Dtex.MakeProgramFromString(
      GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"),
      GLSLProgram::LoadShaderToString("shadowVolume_Frag.glsl"));
-
-  //_testProgram.MakeProgramFromString(
-     //GLSLProgram::LoadShaderToString("shadowVolume_Vert.glsl"),
-     //GLSLProgram::LoadShaderToString("TestFrag.glsl"));
-
 }
 
 void RayCaster::Init(int width, int height)
@@ -85,7 +80,6 @@ void transposeMatrixvf( float *input,  float *output)
 }
 void RayCaster::Render()
 {
-
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GLfloat invRotationMatrix[16];
@@ -214,7 +208,6 @@ void RayCaster::UpdateShadowVolume()
     _fbo->AttachTexture(GL_TEXTURE_3D, _shadowTex->GetTextureID(), GL_COLOR_ATTACHMENT0_EXT,0,0);
     _fbo->IsValid();
     _fbo->Disable();
-
   }
 
   if(_fbo)
@@ -301,7 +294,6 @@ bool RayCaster::LoadVolumeBuffer( void* buffer, int z, int y, int x, dataType ty
     texBlockPool = new GLTexture(x, y, z, GL_LUMINANCE, GL_INTENSITY, GL_UNSIGNED_INT);
 
   texBlockPool->LoadToGPU(buffer);
-
   _sizeX = x; _sizeY = y; _sizeZ = z;
 
   return true;

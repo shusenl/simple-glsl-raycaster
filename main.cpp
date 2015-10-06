@@ -16,9 +16,9 @@ using namespace std;
 
 //lighting
 float light_rotate[16] ={1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 0, 0, 0, 1};
+                         0, 1, 0, 0,
+                         0, 0, 1, 0,
+                         0, 0, 0, 1};
 
 
 int window_id = 0;
@@ -53,7 +53,6 @@ void display()
   Dir[0] = dir.x; Dir[1] = dir.y; Dir[2] = dir.z;
   //if set O Dir Up directly remove the arcBall code above
   raycaster->SetPathParameters(O, Dir, Up);
-
 
   if(x == 0)
   {
@@ -93,9 +92,9 @@ void keyboard(unsigned char key, int x, int y)
   //dir = raycaster->arcBall->GetRotation()*dir;
   switch(key)
   {
-    case '27':
+    case 27:
       exit(0);
-    break;
+      break;
     case 't':
       if(showTF==0)
         showTF=1;
@@ -230,16 +229,14 @@ void reloadShader(int control)
   raycaster->ReLoadShader();
 }
 
-void parameterParser(int argc, char* argv[], rendererParameter &para)
+bool parameterParser(int argc, char* argv[], rendererParameter &para)
 {
   //string argument;
   vector<string> argList;
   vector<string>::iterator it;
 
   for(int i=1; i<argc; i++)
-  {
     argList.push_back(string(argv[i]));
-  }
 
   for(it=argList.begin(); it!=argList.end(); it++)
   {
@@ -283,34 +280,33 @@ void parameterParser(int argc, char* argv[], rendererParameter &para)
       }
       else if( *it == string("-help") || *it == string("--help"))
       {
-        cout<<"-dims 100x100x200 -file D:/volume/head256.raw -type bin (the default type is binary)"<<endl;
+        cout<<"-dims 100x100x200 -filename D:/volume/head256.raw -type bin (the default type is binary)"<<endl;
       }
       else
+      {
         cout<<"error in parameter:"<<*it<<endl;
+        return false;
+      }
     }
     else
+    {
       cout<<"error in parameter:"<<*it<<endl;
-
+      return false;
+    }
   }
-
+  return true;
 }
 
 int main(int argc, char* argv[])
 {
-
   rendererParameter renderPara;
+  //defaults
   renderPara.viewportX = 800; renderPara.viewportY = 800;
-  strcpy(renderPara.filename,"head256X256X256.raw");
-  //renderPara.volDimX = 512;renderPara.volDimY = 512;renderPara.volDimZ = 512;
-  //strcpy(renderPara.filename,"RD0019_Dark_Matter_Density_512x512x512.raw");
-  //strcpy(renderPara.filename,"512-512-452-short.raw");
-  //strcpy(renderPara.filename,"x_recon_torus.raw");
-  //renderPara.volDimX = 512;renderPara.volDimY = 512;renderPara.volDimZ = 452;
-  renderPara.volDimX = 128;renderPara.volDimY = 128;renderPara.volDimZ = 128;
-  //strcpy(renderPara.filename,"h300_0063.raw");
-  //renderPara.volDimX = 302; renderPara.volDimY = 302; renderPara.volDimZ = 302;
 
-  parameterParser(argc,argv, renderPara);
+  if(!parameterParser(argc,argv, renderPara))
+  {
+    printf("Error in the input parameters!\n");
+  }
 
   glutInit(&argc, argv);
   glutInitWindowSize(renderPara.viewportX, renderPara.viewportY);
@@ -326,29 +322,14 @@ int main(int argc, char* argv[])
   raycaster = new RayCaster;
   raycaster->Init(renderPara.viewportX, renderPara.viewportY);
 
-  //volume3D<unsigned char> *vol = new volume3D<unsigned char>(renderPara.filename, renderPara.volDimZ ,renderPara.volDimY, renderPara.volDimX);
-  //raycaster->LoadVolumeBuffer(vol->getDataBuffer(), vol->getDimZ(), vol->getDimY(), vol->getDimX(), Uchar);
-
-  volume3D<float> *vol = new volume3D<float>(renderPara.filename, renderPara.volDimZ ,renderPara.volDimY, renderPara.volDimX);
-  //volume3D<double> *vol = new volume3D<double>(renderPara.filename, renderPara.volDimZ ,renderPara.volDimY, renderPara.volDimX);
-  //volume3D<short> *vol = new volume3D<short>(renderPara.filename, renderPara.volDimZ ,renderPara.volDimY, renderPara.volDimX);
-  vol->updateMaxMin();
-  //printf("dynamicRange: %f", vol->getDynamicRange());
-  //vol->generateHistogram();
-  //printf("max: %f - min: %f", vol->getMax(), vol->getMin());
-  //vol->normalize();
-  //vol->normalize(vol->getMin()*(119.0/256.0), vol->getMax()*(138.0/256.0));
-  //vol->normalize(vol->getMin(), vol->getMax()*(2.0/256.0));
-  //vol->updateMaxMin();
-  //printf("max: %f - min: %f\n", float(vol->getMax()), float(vol->getMin()));
-  volume3D<unsigned char>* uvol = vol->generateUcharNormalized();
+  //assume the volume is unsigned char
+  volume3D<unsigned char> *uvol =
+      new volume3D<unsigned char>(renderPara.filename, renderPara.volDimZ ,renderPara.volDimY, renderPara.volDimX);
   uvol->updateMaxMin();
   printf("max: %f - min: %f\n", float(uvol->getMax()), float(uvol->getMin()));
-  //uvol->writeToFile("darkMatter");
-  //exit(0);
-  raycaster->LoadVolumeBuffer(uvol->getDataBuffer(), vol->getDimZ(), vol->getDimY(), vol->getDimX(), Uchar);
-  //raycaster->LoadVolumeBuffer(vol->getDataBuffer(), vol->getDimZ(), vol->getDimY(), vol->getDimX(), Float);
+  raycaster->LoadVolumeBuffer(uvol->getDataBuffer(), uvol->getDimZ(), uvol->getDimY(), uvol->getDimX(), Uchar);
 
+  // load default TF
   transferfunction = new TransferFunction;
   transferfunction->LoadfromFile("TransparentSytle1");
   raycaster->LoadRendererSetting("RenderStatus");

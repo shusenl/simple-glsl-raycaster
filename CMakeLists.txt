@@ -52,6 +52,19 @@ SET (RENDER_SRC
 
 )
 
+set (SHADER_SRC
+  Raycast_ScreenAlign_Frag.glsl
+  ScreenAlignQuad_Vert.glsl
+  shadowVolume_Frag.glsl
+  shadowVolume_Vert.glsl
+)
+
+set (SAVED_TF
+  TransparentSytle1
+  SolidStyle1
+  RenderStatus #renderStatus
+)
+
 ADD_EXECUTABLE(SimpleRayCaster ${RENDER_HEADERS} ${RENDER_SRC})
 TARGET_LINK_LIBRARIES(SimpleRayCaster
   ${OPENGL_LIBRARIES}
@@ -60,4 +73,5 @@ TARGET_LINK_LIBRARIES(SimpleRayCaster
   ${OPENGL_LIBRARIES}
 )
 
-#install()
+install(TARGETS SimpleRayCaster DESTINATION ${CMAKE_BINARY_DIR}/bin)
+install(FILES ${SHADER_SRC} ${SAVED_TF} DESTINATION ${CMAKE_BINARY_DIR}/bin)
